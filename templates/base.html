@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link type="text/css" href="{% static 'css/styles.css' %}" rel="stylesheet" />
+</head>
+<body style="background-image:url('{% static 'images/bg_img.jpg' %}'); background-size:cover; background-repeat:no-repeat;">
+    <header class="container header">
+        <div class="header_log">
+            <div>LOGO</div>
+            <div>Logo name</div>
+            <div>
+                <p>Контакты</p>
+                <p>Менеджер</p>
+                <p>телефон</p>
+
+            </div>
+        </div>
+        <div class="header_nav">
+            <button>ЗАКАЗ</button>
+            <button>Статистика</button>
+        </div>
+    </header>
+    {% block content %}
+    {% endblock %}
+    <footer class="container footer">
+        <div>LOGO</div>
+        <div>
+            <div>Техническая поддержка</div>
+            <div>mail@mail.ru</div>
+        </div>
+    </footer>
+
+</body>
+</html>

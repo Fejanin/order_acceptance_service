@@ -3,4 +3,5 @@ from django.shortcuts import render
 
 
 def index(request):
-    return render(request, 'order_acceptance_service_abi/index.html')
+    data = {'title': 'Заказ продукции'}
+    return render(request, 'order_acceptance_service_abi/index.html', data)
