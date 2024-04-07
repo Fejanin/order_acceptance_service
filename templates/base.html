@@ -23,12 +23,21 @@ background-position: center;
                 <p>Контакты</p>
                 <p>Менеджер</p>
                 <p>телефон</p>
-
             </div>
         </div>
         <div class="header_nav">
+            <button>Главная страница</button>
             <button>ЗАКАЗ</button>
             <button>Статистика</button>
+            <div>
+                <ul>
+                    {% if user.is_authenticated %}
+                    <li class="last"> {{user.username}} | <a href="{% url 'users:logout' %}">Выйти</a></li>
+                    {% else %}
+                    <li class="last"><a href="{% url 'users:login' %}">Войти</a> | <a href="#">Регистрация</a></li>
+                    {% endif %}
+                </ul>
+            </div>
         </div>
     </header>
     {% block content %}
