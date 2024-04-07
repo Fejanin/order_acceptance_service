@@ -20,4 +20,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('order_acceptance_service_abi.urls')),
+    # namespace="users" - позволяет формировать пространство имен для доступа к URL-маршрутам (users:login)
+    path('users/', include('users.urls', namespace="users")),
 ]
+

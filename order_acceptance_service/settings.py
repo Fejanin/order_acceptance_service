@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'order_acceptance_service_abi.apps.OrderAcceptanceServiceAbiConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -120,6 +121,7 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# подключение не стандартного пути
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
     ]
