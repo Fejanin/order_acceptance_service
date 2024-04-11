@@ -26,9 +26,10 @@ background-position: center;
             </div>
         </div>
         <div class="header_nav">
-            <button>Главная страница</button>
-            <button>ЗАКАЗ</button>
+            <button><a href="{% url 'start_page' %}">Главная страница</a></button>
+            <button><a href="{% url 'order' %}">ЗАКАЗ</a></button>
             <button>Статистика</button>
+            <div class="main"></div>
             <div>
                 <ul>
                     {% if user.is_authenticated %}
