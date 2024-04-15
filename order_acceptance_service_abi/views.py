@@ -14,6 +14,21 @@ def start_page(request):
 
 @login_required
 def order(request):
+    if request.method == 'POST':
+        user_order = {}
+        if request.user.is_authenticated:
+            print(f'{request.user.pk = }')
+            for i in request.POST:
+                if 'id_' in i:
+                    if request.POST[i]:
+                        print(f'{i} = {request.POST[i]}')
+                        print(type(request.POST[i]))
+                        # request.POST[i] ==> str
+                        try:
+                            user_order[i] = round(float(request.POST[i]), 2)
+                        except:
+                            pass
+        print(user_order)
     products = Product.objects.filter(is_active=True)
     products_by_cat = products_by_cat_dict(products)
     result = products_table_lst(products_by_cat)
