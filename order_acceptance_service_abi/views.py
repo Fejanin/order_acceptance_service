@@ -15,14 +15,11 @@ def start_page(request):
 @login_required
 def order(request):
     if request.method == 'POST':
-        user_order = {}
+        user_order = {'username': request.user.username}
         if request.user.is_authenticated:
-            print(f'{request.user.pk = }')
             for i in request.POST:
                 if 'id_' in i:
                     if request.POST[i]:
-                        print(f'{i} = {request.POST[i]}')
-                        print(type(request.POST[i]))
                         # request.POST[i] ==> str
                         try:
                             user_order[i] = round(float(request.POST[i]), 2)
