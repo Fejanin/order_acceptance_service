@@ -11,4 +11,5 @@ class LoginUserForm(AuthenticationForm):
 
     class Meta:
         model = get_user_model()
+        print(f'{model = }')
         fields = ['username', 'password']
