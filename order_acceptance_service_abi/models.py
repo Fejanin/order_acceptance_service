@@ -37,3 +37,27 @@ class SecondEmailUser(models.Model):
 
     def __str__(self):
         return self.second_email
+
+
+class Order(models.Model):
+    STATUSES_CHOICES = [
+        ('SEND', 'ЗАКАЗ ОТПРАВЛЕН'),
+        ('TAKE', 'ЗАКАЗ ПРИНЯТ В РАБОТУ'),
+        ('CHAN', 'ЗАКАЗ ОТМЕНЕН'),
+        ('COMP', 'ЗАКАЗ ВЫПОЛНЕН'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    time_create = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
+    time_update = models.DateTimeField(auto_now=True, verbose_name="Дата обновления")
+    product = models.ManyToManyField(Product, through='OrderProduct')
+    status = models.CharField(max_length=4, choices=STATUSES_CHOICES, default='SEND', verbose_name="Статус")
+
+    def __str__(self):
+        return f'{self.time_create}{self.pk}'
+
+
+class OrderProduct(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    order = models.ForeignKey(Order, on_delete=models.PROTECT)
+    count_product = models.DecimalField(decimal_places=2, max_digits=8, verbose_name="Количество")
+    price = models.DecimalField(decimal_places=2, max_digits=8, default=0, verbose_name="Цена")

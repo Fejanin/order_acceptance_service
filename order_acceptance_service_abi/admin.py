@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, SecondEmailUser
+from .models import Product, SecondEmailUser, Order, OrderProduct
 
 
 @admin.register(Product)
@@ -32,4 +32,5 @@ class SecondEmailUserAdmin(admin.ModelAdmin):
 
 admin.site.site_header = "Панель администрирования"
 admin.site.index_title = "Заказы оптовых клиентов"
-
+admin.site.register(Order)
+admin.site.register(OrderProduct)
