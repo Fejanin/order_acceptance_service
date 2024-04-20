@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product
+from .models import Product, SecondEmailUser
 
 
 @admin.register(Product)
@@ -22,7 +22,14 @@ class ProductAdmin(admin.ModelAdmin):
     list_per_page = 15
 
 
-# admin.site.register(Product, ProductAdmin)
+@admin.register(SecondEmailUser)
+class SecondEmailUserAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'user',
+        'second_email',
+    )
+
 admin.site.site_header = "Панель администрирования"
 admin.site.index_title = "Заказы оптовых клиентов"
 

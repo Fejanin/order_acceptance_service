@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -30,3 +31,9 @@ class Product(models.Model):
         return self.product_name
 
 
+class SecondEmailUser(models.Model):
+    user = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='second_email')
+    second_email = models.EmailField()
+
+    def __str__(self):
+        return self.second_email
