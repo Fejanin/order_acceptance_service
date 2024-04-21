@@ -10,7 +10,9 @@
     <title>{{ title }}</title>
     <link type="text/css" href="{% static 'css/styles.css' %}" rel="stylesheet" />
 </head>
-<body style="background-image: url('{% static 'images/bg_img.jpg' %}');
+<body style="
+background: black;
+background-image: url('{% static 'images/bg_img.jpg' %}');
 background-size: cover;
 background-repeat: no-repeat;
 background-position: center center;
@@ -28,8 +30,20 @@ background-attachment: fixed;
             </div>
         </div>
         <div class="header_nav">
-            <button><a href="{% url 'start_page' %}">Главная страница</a></button>
-            <button><a href="{% url 'order' %}">ЗАКАЗ</a></button>
+            <button>
+                {% if path == '/' %}
+                    Главная страница
+                {% else %}
+                    <a href="{% url 'start_page' %}">Главная страница</a>
+                {% endif %}
+            </button>
+            <button>
+                {% if path == '/order/' %}
+                    ЗАКАЗ
+                {% else %}
+                    <a href="{% url 'order' %}">ЗАКАЗ</a>
+                {% endif %}
+            </button>
             <button>Статистика</button>
             <div class="main"></div>
             <div>

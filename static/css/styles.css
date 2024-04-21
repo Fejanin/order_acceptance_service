@@ -90,3 +90,11 @@ button {
   max-width: 9%;
 }
 
+hr {
+    width: 100%;
+    margin: 10px;
+}
+
+.list_orders {
+    color: white;
+}
