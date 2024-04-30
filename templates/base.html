@@ -44,14 +44,13 @@ background-attachment: fixed;
                     <a href="{% url 'order' %}">ЗАКАЗ</a>
                 {% endif %}
             </button>
-            <button>Статистика</button>
             <div class="main"></div>
             <div>
-                <ul>
+                <ul class="registration">
                     {% if user.is_authenticated %}
                     <li class="last"> {{user.username}} | <a href="{% url 'users:logout' %}">Выйти</a></li>
                     {% else %}
-                    <li class="last"><a href="{% url 'users:login' %}">Войти</a> | <a href="#">Регистрация</a></li>
+                    <li class="last"><a href="{% url 'users:login' %}">Войти</a></li>
                     {% endif %}
                 </ul>
             </div>

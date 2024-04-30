@@ -2,10 +2,17 @@
 
 {% block content %}
     <dev class="container main">
-        <h1>{{ title }}</h1>
-        <hr>
-        <div class="table">
-            {% if title != no_access %}
+        {% if title != no_access %}
+            <h2>Заказ №{{ title.time_create|date:"Y.m.d"|cut:"." }}#{{ title.id }}</h2>
+            {% if user.is_superuser %}
+                <h3>Скачать заказ (txt)</h3>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Скачать файл">
+                </form>
+            {% endif %}
+            <hr>
+            <div class="table">
                 <div class="row">
                     <div class="cell">Код единицы продаж</div>
                     <div class="cell">Код продукта</div>
@@ -22,26 +29,29 @@
                     <div class="cell">Ед. изм.</div>
                     <div class="cell">Заказ</div>
                 </div>
-            {% endif %}
-            {% for product in products %}
-                 <div class="row">
-                    <div class="cell">{{ product.product.sales_unit_code }}</div>
-                    <div class="cell">{{ product.product.product_code }}</div>
-                    <div class="cell">{{ product.product.option_number }}</div>
-                    <div class="cell">{{ product.product.barcode }}</div>
-                    <div class="cell">{{ product.product.net_weight_piece }}</div>
-                    <div class="cell">{{ product.product.number_pieces_in_box }}</div>
-                    <div class="cell">{{ product.product.net_weight_of_box }}</div>
-                    <div class="cell">{{ product.product.gross_weight_of_box }}</div>
-                    <div class="cell">{{ product.product.number_of_boxes_per_pallet }}</div>
-                    <div class="cell">{{ product.product.factory }}</div>
-                    <div class="cell">{{ product.product.expiration_date }}</div>
-                    <div class="cell wider">{{ product.product.product_name }}</div>
-                    <div class="cell">{{ product.product.units_measurement }}</div>
-                    <div class="cell">{{ product.count_product }}</div>
-                 </div>
-            {% endfor %}
-        </div>
+                {% for product in products %}
+                     <div class="row">
+                        <div class="cell">{{ product.product.sales_unit_code }}</div>
+                        <div class="cell">{{ product.product.product_code }}</div>
+                        <div class="cell">{{ product.product.option_number }}</div>
+                        <div class="cell">{{ product.product.barcode }}</div>
+                        <div class="cell">{{ product.product.net_weight_piece }}</div>
+                        <div class="cell">{{ product.product.number_pieces_in_box }}</div>
+                        <div class="cell">{{ product.product.net_weight_of_box }}</div>
+                        <div class="cell">{{ product.product.gross_weight_of_box }}</div>
+                        <div class="cell">{{ product.product.number_of_boxes_per_pallet }}</div>
+                        <div class="cell">{{ product.product.factory }}</div>
+                        <div class="cell">{{ product.product.expiration_date }}</div>
+                        <div class="cell wider">{{ product.product.product_name }}</div>
+                        <div class="cell">{{ product.product.units_measurement }}</div>
+                        <div class="cell">{{ product.count_product }}</div>
+                     </div>
+                {% endfor %}
+
+            </div>
+        {% else %}
+            <h2>{{ title }}</h2>
+        {% endif %}
         <dev class="main"></dev>
     </dev>
 {% endblock %}

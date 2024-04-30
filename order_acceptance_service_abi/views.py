@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.http import HttpResponseNotFound
+from django.http import HttpResponseNotFound , FileResponse
 from django.shortcuts import render
 from order_acceptance_service_abi.models import Product, Order, OrderProduct
 from .forms import UploadFileForm
@@ -11,12 +11,16 @@ import os
 
 @login_required
 def start_page(request):
-    orders = Order.objects.filter(user_id=request.user.id)
     data = {
         'title': 'Стартовая страница',
         'path': request.path,
-        'orders': orders,
     }
+    user = request.user
+    if user.is_superuser:
+        orders = Order.objects.all()
+    else:
+        orders = Order.objects.filter(user_id=request.user.id)
+    data['orders'] = orders
     return render(request, 'order_acceptance_service_abi/start_page.html', data)
 
 
@@ -61,24 +65,37 @@ def order(request):
 @login_required
 def show_order(request, order_id):
     no_access = 'У вас нет доступа к данной странице!'
+    data = {
+        'title': no_access,
+        'no_access': no_access,
+    }
     user_pk = request.user.pk
     user_order = Order.objects.get(pk=order_id)
-    if user_pk != user_order.user_id:
-        data = {
-            'title': no_access,
-            'no_access': no_access,
-        }
-    else:
+    if request.user.is_superuser:
         products = OrderProduct.objects.filter(order_id=order_id)
-        data = {
-            'title': f'Заказ N{order_id} от пользователя {User.objects.get(pk=user_order.user_id)}',
-            'products': products,
-            'no_access': no_access,
-        }
+        data['products'] = products
+        data['title'] = Order.objects.get(pk=order_id)
+        if request.method == 'POST':
+            return download(products, order_id, user_order)
+    elif user_pk == user_order.user_id:
+        products = OrderProduct.objects.filter(order_id=order_id)
+        data['products'] = products
+        data['title'] = Order.objects.get(pk=order_id)
     return render(request, 'order_acceptance_service_abi/show_order.html', data)
 
 
-
+def download(products, order_id, user_order):
+    directory = 'orders'
+    files = os.listdir(directory)
+    for f in files:
+        os.remove(f'{directory}/{f}')
+    filename = f'orders/{user_order.user.username} заказ №{order_id} {str(user_order.time_create)[:19].replace(":", ".")}.txt'
+    with open(filename, 'w', encoding='UTF-8') as f:
+        f.writelines(f'{user_order.time_create}\n')
+        for p in products:
+            f.writelines(f'{p.product.sales_unit_code}\t{p.product.product_code}\t{p.product.option_number}\t{p.product.barcode}\t{p.product.product_name}\t{p.count_product}\n')
+    response = FileResponse(open(filename, 'rb'), as_attachment=True, filename=filename)
+    return response
 
 
 @login_required

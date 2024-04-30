@@ -7,8 +7,13 @@
         <dev>
             {% for order in orders %}
                 <p>
+                    {% if user.is_superuser %}
+                        <hr>
+                        <p>{{ order.user }}</p>
+                    {% endif %}
                     <a class="list_orders" href="{{ order.id }}">Заказ №{{ order.time_create|date:"d.m.Y"|cut:"." }}#{{ order.id }} - {{ order.status }}</a>
                 </p>
+
             {% endfor %}
         </dev>
         <dev class="main"></dev>
