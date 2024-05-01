@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 from django.http import HttpResponseNotFound , FileResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from order_acceptance_service_abi.models import Product, Order, OrderProduct
 from .forms import UploadFileForm
 from .utils import products_by_cat_dict, products_table_lst, upgrade_products_table, handle_uploaded_file
@@ -48,6 +48,7 @@ def order(request):
                         count_product=user_order[i],
                     )
                     product_to_order.save()
+            return redirect('start_page')
     products = Product.objects.filter(is_active=True)
     products_by_cat = products_by_cat_dict(products)
     result = products_table_lst(products_by_cat)

@@ -52,6 +52,9 @@ class Order(models.Model):
     product = models.ManyToManyField(Product, through='OrderProduct')
     status = models.CharField(max_length=4, choices=STATUSES_CHOICES, default='SEND', verbose_name="Статус")
 
+    class Meta:
+        ordering = ['-time_create']
+
     def __str__(self):
         return f'{self.time_create}#{self.pk}'
 
