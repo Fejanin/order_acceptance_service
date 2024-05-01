@@ -29,28 +29,25 @@ def order(request):
     if request.method == 'POST':
         user = request.user
         user_order = {'username': user.username}
-        if request.user.is_authenticated:
-            # создать ф-цию в utils.py
-            for i in request.POST:
-                if 'product_id_' in i:
-                    if request.POST[i]:
-                        try:
-                            user_order[i] = round(float(request.POST[i]), 2)
-                        except:
-                            pass
-            if len(user_order) > 1:
-                # создать ф-цию в utils.py
-                new_order = Order(user=user)
-                new_order.save()
-                for i in user_order:
-                    if i != 'username':
-                        product_id = int(i.replace('product_id_', ''))
-                        product_to_order = OrderProduct(
-                            product=Product.objects.get(pk=product_id),
-                            order=new_order,
-                            count_product=user_order[i],
-                        )
-                        product_to_order.save()
+        for i in request.POST:
+            if 'product_id_' in i:
+                if request.POST[i]:
+                    try:
+                        user_order[i] = round(float(request.POST[i]), 2)
+                    except:
+                        pass
+        if len(user_order) > 1:
+            new_order = Order(user=user)
+            new_order.save()
+            for i in user_order:
+                if i != 'username':
+                    product_id = int(i.replace('product_id_', ''))
+                    product_to_order = OrderProduct(
+                        product=Product.objects.get(pk=product_id),
+                        order=new_order,
+                        count_product=user_order[i],
+                    )
+                    product_to_order.save()
     products = Product.objects.filter(is_active=True)
     products_by_cat = products_by_cat_dict(products)
     result = products_table_lst(products_by_cat)
