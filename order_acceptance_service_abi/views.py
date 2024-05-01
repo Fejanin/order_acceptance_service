@@ -1,12 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.http import HttpResponseNotFound , FileResponse
+from django.http import HttpResponseNotFound, FileResponse
 from django.shortcuts import render, redirect
 from order_acceptance_service_abi.models import Product, Order, OrderProduct
 from .forms import UploadFileForm
 from .utils import products_by_cat_dict, products_table_lst, upgrade_products_table, handle_uploaded_file
 import os
+from django.core.mail import send_mail
 
 
 @login_required
@@ -48,6 +49,21 @@ def order(request):
                         count_product=user_order[i],
                     )
                     product_to_order.save()
+            # TODO send_mail
+            products = OrderProduct.objects.filter(order_id=new_order.pk)
+            text = '''
+Добрый день.
+Спсибо за составленный заказ:
+'''
+            for p in products:
+                text += f'{p.product} в количестве - {p.count_product}кг\n'
+            text += '\nЕсли вы не оставляли заказ, свяжитесь с менеджером по тел.: +7(999)999-99-99'
+            send_mail(
+                'From saller',
+                text,
+                'sales@mail.ru',
+                ['you@mail.ru', 'admin@mail.ru',],
+            )
             return redirect('start_page')
     products = Product.objects.filter(is_active=True)
     products_by_cat = products_by_cat_dict(products)
