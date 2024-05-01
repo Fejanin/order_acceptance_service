@@ -1,5 +1,4 @@
 from openpyxl import load_workbook
-import os
 
 
 XLSXCOL_TO_MODELCOL = {

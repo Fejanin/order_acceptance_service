@@ -98,3 +98,7 @@ hr {
 .list_orders {
     color: white;
 }
+
+.registration {
+    list-style-type: none; /* Убирает буллиты */
+}
