@@ -11,9 +11,10 @@
                         <hr>
                         <p>{{ order.user }}</p>
                     {% endif %}
-                    <a class="list_orders" href="{{ order.id }}">Заказ №{{ order.time_create|date:"d.m.Y"|cut:"." }}#{{ order.id }} - {{ order.status }}</a>
+                    <a class="list_orders" href="{{ order.id }}">Заказ №{{ order.time_create|date:"d.m.Y"|cut:"." }}#{{ order.id }}</a>
+                    <span hidden>{{ order.get_status }}</span>
+                     - {{ order.status_to_str }}
                 </p>
-
             {% endfor %}
         </dev>
         <dev class="main"></dev>

@@ -41,10 +41,10 @@ class SecondEmailUser(models.Model):
 
 class Order(models.Model):
     STATUSES_CHOICES = [
-        ('SEND', 'ЗАКАЗ ОТПРАВЛЕН'),
-        ('TAKE', 'ЗАКАЗ ПРИНЯТ В РАБОТУ'),
-        ('CHAN', 'ЗАКАЗ ОТМЕНЕН'),
-        ('COMP', 'ЗАКАЗ ВЫПОЛНЕН'),
+        ('SEND', 'ОТПРАВЛЕН'),
+        ('TAKE', 'ПРИНЯТ В РАБОТУ'),
+        ('CHAN', 'ОТМЕНЕН'),
+        ('COMP', 'ВЫПОЛНЕН'),
     ]
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     time_create = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
@@ -57,6 +57,9 @@ class Order(models.Model):
 
     def __str__(self):
         return f'{self.time_create}#{self.pk}'
+
+    def get_status(self):
+        self.status_to_str = dict(self.STATUSES_CHOICES)[self.status]
 
 
 class OrderProduct(models.Model):
