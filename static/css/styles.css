@@ -82,19 +82,19 @@ button {
   padding: 0.5%;
   border: 0.5px solid grey;
   word-wrap: break-word;
-  min-width: 4.8%;
-  max-width: 4.8%;
+  min-width: 4.8%; /*4.8%*/
+  max-width: 4.8%; /*4.8%*/
   hyphens: auto;
   text-align: center;
 }
 
-input {
-    font-size: 30px;
+.wider {
+  min-width: 20%; /*9*/
+  max-width: 20%; /*9%*/
 }
 
-.wider {
-  min-width: 9%;
-  max-width: 9%;
+input {
+    font-size: 30px;
 }
 
 hr {
