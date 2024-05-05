@@ -7,11 +7,12 @@ body, html {
     display: flex;
     flex-direction: column;
     height: 100%;
+    font-size: 30px;
 }
 
 .container {
     display: flex;
-    width: 1600px;
+    width: 3400px; /*1600*/
     margin: 0px auto;
     justify-content: space-between;
     color: white;
@@ -53,6 +54,7 @@ button {
     background-color: #222222;
     padding: 10px;
     color: white;
+    font-size: 30px;
 }
 
 
@@ -73,7 +75,6 @@ button {
   flex-wrap: wrap;
   max-width: 100%;
   justify-content: center;
-  font-size: 14px;
 }
 
 .cell {
@@ -85,7 +86,11 @@ button {
   max-width: 4.8%;
   hyphens: auto;
   text-align: center;
-  }
+}
+
+input {
+    font-size: 30px;
+}
 
 .wider {
   min-width: 9%;
@@ -103,4 +108,49 @@ hr {
 
 .registration {
     list-style-type: none; /* Убирает буллиты */
+}
+
+@media (max-width: 2560px) {
+    body, html {
+        font-size: 19px;
+    }
+    button {
+        font-size: 19px;
+    }
+    input {
+        font-size: 19px;
+    }
+    .container {
+        width: 2200px;
+    }
+}
+
+@media (max-width: 1920px) {
+    body, html {
+        font-size: 14px;
+    }
+    button {
+        font-size: 14px;
+    }
+    input {
+        font-size: 14px;
+    }
+    .container {
+        width: 1600px;
+    }
+}
+
+@media (max-width: 1600px) {
+    body, html {
+        font-size: 12px;
+    }
+    button {
+        font-size: 12px;
+    }
+    input {
+        font-size: 12px;
+    }
+    .container {
+        width: 1400px;
+    }
 }

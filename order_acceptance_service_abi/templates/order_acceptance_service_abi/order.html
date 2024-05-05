@@ -29,6 +29,9 @@
                 <div class="cell">Объём заказа, м3</div>
             </div>
             {% for obj in products_by_cat %}
+                {% if obj.brand_name %}
+                    <br>
+                {% endif %}
                 <div><h2>{{ obj.brand_name }}</h2></div>
                 <div><h3>{{ obj.category }}</h3></div>
                 <div><h4>{{ obj.product_group }}</h4></div>
@@ -49,8 +52,6 @@
                             <div class="cell wider">{{ product.product_name }}</div>
                             <div class="cell">{{ product.units_measurement }}</div>
                             <div class="cell"><input name="product_id_{{ product.pk }}" size="5"  type="number" step="any" /></div>
-                            <div class="cell">0,00</div>
-                            <div class="cell">0,00</div>
                         </div>
                     {% endfor %}
                 {% endif %}
