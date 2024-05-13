@@ -1,13 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.db import IntegrityError
-from django.http import HttpResponseNotFound, FileResponse
+from django.http import HttpResponseNotFound
 from django.shortcuts import render, redirect
 from order_acceptance_service_abi.models import Product, Order, OrderProduct
 from .forms import UploadFileForm
-from .utils import products_by_cat_dict, products_table_lst, upgrade_products_table, handle_uploaded_file
+from .utils import products_by_cat_dict, products_table_lst, upgrade_products_table, handle_uploaded_file, mail_to_user, \
+    download
 import os
-from django.core.mail import send_mail
 
 
 @login_required
@@ -35,8 +34,8 @@ def order(request):
                 if request.POST[i]:
                     try:
                         user_order[i] = round(float(request.POST[i]), 2)
-                    except:
-                        pass
+                    except Exception as e:
+                        print(f'{e}')
         if len(user_order) > 1:
             new_order = Order(user=user)
             new_order.save()
@@ -49,21 +48,8 @@ def order(request):
                         count_product=user_order[i],
                     )
                     product_to_order.save()
-            # TODO send_mail
             products = OrderProduct.objects.filter(order_id=new_order.pk)
-            text = '''
-Добрый день.
-Спсибо за составленный заказ:
-'''
-            for p in products:
-                text += f'{p.product} в количестве - {p.count_product}кг\n'
-            text += '\nЕсли вы не оставляли заказ, свяжитесь с менеджером по тел.: +7(999)999-99-99'
-            send_mail(
-                'From saller',
-                text,
-                'sales@mail.ru',
-                ['you@mail.ru', 'admin@mail.ru',],
-            )
+            mail_to_user(products)
             return redirect('start_page')
     products = Product.objects.filter(is_active=True)
     products_by_cat = products_by_cat_dict(products)
@@ -98,25 +84,12 @@ def show_order(request, order_id):
     return render(request, 'order_acceptance_service_abi/show_order.html', data)
 
 
-def download(products, order_id, user_order):
-    directory = 'orders'
-    files = os.listdir(directory)
-    for f in files:
-        os.remove(f'{directory}/{f}')
-    filename = f'orders/{user_order.user.username} заказ №{order_id} {str(user_order.time_create)[:19].replace(":", ".")}.txt'
-    with open(filename, 'w', encoding='UTF-8') as f:
-        f.writelines(f'{user_order.time_create}\n')
-        for p in products:
-            f.writelines(f'{p.product.sales_unit_code}\t{p.product.product_code}\t{p.product.option_number}\t{p.product.barcode}\t{p.product.product_name}\t{p.count_product}\n')
-    response = FileResponse(open(filename, 'rb'), as_attachment=True, filename=filename)
-    return response
-
-
 @login_required
 def upload_file(request):
     directory = 'uploads'
     data = {
         'title': f'Загрузка файла',
+        'path': request.path,
     }
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
@@ -172,7 +145,8 @@ def upload_file(request):
                                 product_group=i['product_group'],
                             )
                         except IntegrityError as e:
-                            print(e)
+                            # в дальнейшем будет создано логирование, куда и будет заноситься информация об ошибках
+                            print(f'{e}')
                 os.remove(f'{directory}/{files[0]}')
     else:
         form = UploadFileForm()

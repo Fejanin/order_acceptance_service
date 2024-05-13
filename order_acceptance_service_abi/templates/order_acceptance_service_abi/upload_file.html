@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <dev class="container main">
+    <div class="container main">
         <h1>{{ title }}</h1>
         <ul>
             {% for f in files %}
@@ -11,7 +11,6 @@
             {% endfor %}
         </ul>
         {% if user.is_superuser %}
-            Это супер!!!
             <form action="" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.as_p }}
@@ -19,5 +18,5 @@
             </form>
         {% endif %}
         <div class="main"></div>
-    </dev>
+    </div>
 {% endblock %}

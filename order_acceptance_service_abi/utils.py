@@ -1,4 +1,7 @@
+from django.http import FileResponse
 from openpyxl import load_workbook
+from django.core.mail import send_mail
+import os
 
 
 XLSXCOL_TO_MODELCOL = {
@@ -22,17 +25,17 @@ XLSXCOL_TO_MODELCOL = {
 def products_by_cat_dict(products):
     products_by_cat = {}
     for i in products:
-        if not i.brand_name in products_by_cat:
+        if i.brand_name not in products_by_cat:
             products_by_cat[i.brand_name] = {
                 i.category: {
                     i.product_group: [i]
                 }
             }
         else:
-            if not i.category in products_by_cat[i.brand_name]:
+            if i.category not in products_by_cat[i.brand_name]:
                 products_by_cat[i.brand_name][i.category] = {i.product_group: [i]}
             else:
-                if not i.product_group in products_by_cat[i.brand_name][i.category]:
+                if i.product_group not in products_by_cat[i.brand_name][i.category]:
                     products_by_cat[i.brand_name][i.category][i.product_group] = [i]
                 else:
                     products_by_cat[i.brand_name][i.category][i.product_group].append(i)
@@ -123,3 +126,33 @@ def upgrade_products_table(file_name):
             data_sku.update(current_levels)
             result.append(data_sku)
     return result
+
+
+def mail_to_user(products, emails=['you@mail.ru', 'admin@mail.ru']):
+    text = '''
+Добрый день.
+Спсибо за составленный заказ:
+'''
+    for p in products:
+        text += f'{p.product} в количестве - {p.count_product}кг\n'
+    text += '\nЕсли вы не оставляли заказ, свяжитесь с менеджером по тел.: +7(999)999-99-99'
+    send_mail(
+        'From saller',
+        text,
+        'sales@mail.ru',
+        emails,
+    )
+
+
+def download(products, order_id, user_order):
+    directory = 'orders'
+    files = os.listdir(directory)
+    for f in files:
+        os.remove(f'{directory}/{f}')
+    filename = f'orders/{user_order.user.username} заказ №{order_id} {str(user_order.time_create)[:19].replace(":", ".")}.txt'
+    with open(filename, 'w', encoding='UTF-8') as f:
+        f.writelines(f'{user_order.time_create}\n')
+        for p in products:
+            f.writelines(f'{p.product.sales_unit_code}\t{p.product.product_code}\t{p.product.option_number}\t{p.product.barcode}\t{p.product.product_name}\t{p.count_product}\n')
+    response = FileResponse(open(filename, 'rb'), as_attachment=True, filename=filename)
+    return response

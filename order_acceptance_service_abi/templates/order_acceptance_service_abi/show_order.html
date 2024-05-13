@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <dev class="container main">
+    <div class="container main">
         {% if title != no_access %}
             <h2>Заказ №{{ title.time_create|date:"Y.m.d"|cut:"." }}#{{ title.id }}</h2>
             {% if user.is_superuser %}
@@ -52,6 +52,6 @@
         {% else %}
             <h2>{{ title }}</h2>
         {% endif %}
-        <dev class="main"></dev>
-    </dev>
+        <div class="main"></div>
+    </div>
 {% endblock %}
