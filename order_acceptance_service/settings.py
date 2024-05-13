@@ -135,9 +135,6 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# задаем URL-адрес, на который следует перенаправлять пользователя после успешной авторизации
-LOGIN_REDIRECT_URL = 'start_page'
-
 LOGIN_URL = 'users:login'
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"

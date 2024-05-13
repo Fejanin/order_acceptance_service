@@ -12,7 +12,7 @@
 </head>
 <body style="
 background: black;
-background-image: url('{% static 'images/bg_img6.jpg' %}');
+background-image: url('{% static 'images/bg_img.jpg' %}');
 background-size: cover;
 background-repeat: no-repeat;
 background-position: center center;
@@ -30,20 +30,29 @@ background-attachment: fixed;
             </div>
         </div>
         <div class="header_nav">
-            <button>
+            <div class="nav">
                 {% if path == '/' %}
                     Главная страница
                 {% else %}
                     <a href="{% url 'start_page' %}">Главная страница</a>
                 {% endif %}
-            </button>
-            <button>
+            </div>
+            <div class="nav">
                 {% if path == '/order/' %}
                     ЗАКАЗ
                 {% else %}
                     <a href="{% url 'order' %}">ЗАКАЗ</a>
                 {% endif %}
-            </button>
+            </div>
+            {% if user.is_superuser %}
+                <div class="nav">
+                    {% if path == '/upload/' %}
+                        Обновить продукцию
+                    {% else %}
+                        <a href="{% url 'upload_file' %}">Обновить продукцию</a>
+                    {% endif %}
+                </div>
+            {% endif %}
             <div class="main"></div>
             <div>
                 <ul class="registration">
@@ -58,7 +67,6 @@ background-attachment: fixed;
     </header>
     {% block content %}
     {% endblock %}
-
     <footer class="container footer">
         <div>LOGO</div>
         <div>
